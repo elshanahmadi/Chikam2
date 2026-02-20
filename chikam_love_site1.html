@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>برای چیکام 🤍</title>
+<style>
+:root{--night:#070b1f;--deep:#0f163a;--pink:#ffb7c5;--text:#f1f3ff}
+body{margin:0;font-family:Tahoma,system-ui;background:linear-gradient(var(--night),var(--deep));color:var(--text);overflow:hidden}
+section{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px}
+section.active{display:flex}
+p{max-width:650px;line-height:2}
+button{padding:14px 26px;border:none;border-radius:30px;background:white;color:#111;font-size:18px;cursor:pointer;margin-top:25px}
+
+/* sky */
+.sky{position:absolute;inset:0;z-index:-1}
+.star{position:absolute;width:3px;height:3px;background:white;border-radius:50%;animation:twinkle 2.5s infinite alternate}
+@keyframes twinkle{from{opacity:.2}to{opacity:1}}
+#moon{width:150px;height:150px;border-radius:50%;background:#fff;box-shadow:0 0 70px #fff;margin:20px auto}
+
+/* cat image */
+.cat{width:170px;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+#timer{font-size:28px;margin-top:15px}
+.stars-game span{font-size:55px;cursor:pointer;margin:12px}
+.hold{background:var(--pink);color:white}
+</style>
+</head>
+<body>
+<audio id="music" loop>
+<source src="kiss.mp3" type="audio/mpeg" />
+</audio>
+
+<div class="sky" id="sky"></div>
+
+<!-- صفحه 1 -->
+<section id="s1" class="active">
+<img src="cat1.png" class="cat" />
+<div id="moon"></div>
+<p id="intro"></p>
+<button onclick="next(2);document.getElementById('music').play()">ببین کی ساخته 👀</button>
+</section>
+
+<!-- صفحه 2 -->
+<section id="s2">
+<img src="cat2.png" class="cat" />
+<p>راستش… من طراح سایت نیستم 😅<br>ولی برای تو یاد گرفتم چون بعضی آدما ارزش اینو دارن که براشون یه دنیا ساخت</p>
+<button onclick="next(3)">ادامه</button>
+</section>
+
+<!-- صفحه 3 -->
+<section id="s3">
+<img src="cat3.png" class="cat" />
+<p>از اون روزی که وارد زندگیم شدی…</p>
+<div id="timer"></div>
+<button onclick="next(4)">ادامه</button>
+</section>
+
+<!-- صفحه 4 -->
+<section id="s4">
+<img src="cat4.png" class="cat" />
+<p>سه تا ستاره قایم شدن ✨</p>
+<div class="stars-game"><span onclick="star(this,0)">⭐</span><span onclick="star(this,1)">⭐</span><span onclick="star(this,2)">⭐</span></div>
+<p id="gameText"></p>
+</section>
+
+<!-- صفحه 5 -->
+<section id="s5">
+<img src="cat5.png" class="cat" />
+<p>بعضی آدما میان تو زندگی و فقط یه آدم معمولی نیستن<br>میشن آرامش، عادت، دلیل لبخند<br><br>تو برای من همونی چیکام</p>
+<button onclick="next(6)">ادامه</button>
+</section>
+
+<!-- صفحه 6 -->
+<section id="s6">
+<img src="cat6.png" class="cat" />
+<button class="hold" id="holdBtn">نگه دار…</button>
+<h1 id="love"></h1>
+<p id="final"></p>
+</section>
+
+<script>
+// stars sky
+const sky=document.getElementById('sky');
+for(let i=0;i<120;i++){const s=document.createElement('div');s.className='star';s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';s.style.animationDelay=Math.random()*3+'s';sky.appendChild(s)}
+
+// intro typing
+const intro=["هی… صبر کن","قبل از اینکه امروزتو ادامه بدی","یه نفر یه چیزی برات ساخته","فقط برای تو چیکام 🤍"];
+let a=0,b=0;const el=document.getElementById('intro');
+function type(){if(a<intro.length){if(b<intro[a].length){el.textContent+=intro[a][b++];setTimeout(type,40)}else{el.textContent+='\n';a++;b=0;setTimeout(type,600)}}}type();
+
+// page switch
+function next(n){document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));document.getElementById('s'+n).classList.add('active')}
+
+// timer
+const startDate=new Date('2023-12-20T00:00:00');
+setInterval(()=>{const now=new Date();const diff=now-startDate;const d=Math.floor(diff/86400000);const h=Math.floor(diff/3600000)%24;const m=Math.floor(diff/60000)%60;document.getElementById('timer').textContent=`${d} روز ${h} ساعت ${m} دقیقه کنار همیم`;},1000);
+
+// game
+let f=0;const texts=["حس کردم قبلاً میشناسمت","کنار تو خود واقعیمم","هر روز بیشتر دوستت دارم"];
+function star(el,i){el.textContent='✨';document.getElementById('gameText').textContent=texts[i];f++;if(f===3)setTimeout(()=>next(5),1000)}
+
+// hold
+let holdTimer;const hold=document.getElementById('holdBtn');
+hold.onmousedown=hold.ontouchstart=()=>{holdTimer=setTimeout(()=>{document.getElementById('love').textContent='عمروووم ♡';setTimeout(()=>document.getElementById('final').textContent='و این تازه شروع ماست… — الشن',1200)},1200)}
+hold.onmouseup=hold.ontouchend=()=>clearTimeout(holdTimer);
+</script>
+</body>
+</html>
